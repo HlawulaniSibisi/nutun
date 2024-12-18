@@ -1,0 +1,84 @@
+
+<table class="ui celled table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Address</th>
+
+            <th>Rain</th>
+            <th>Sun</th>
+            <th>Humidity</th>
+            <th>Min</th>
+            <th>Max</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for temp in data %}
+        <tr>
+            <td>
+                {{ temp.created_at | moment }}
+            </td>
+            <td>
+                {{temp.address}}
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="assets/images/rain.png" class="ui mini rounded image">
+                    <div class="content">
+                        {{temp.rain}}
+                    <div class="sub header">
+                        Rain
+                    </div>
+                </div>
+                </h4>
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="assets/images/sun.png" class="ui mini rounded image">
+                    <div class="content">
+                        {{temp.sun}}
+                    <div class="sub header">
+                        Sun
+                    </div>
+                </div>
+                </h4>
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="assets/images/humidity.png" class="ui mini rounded image">
+                    <div class="content">
+                        {{temp.humidity}}
+                    <div class="sub header">
+                        Humidity
+                    </div>
+                </div>
+                </h4>
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="assets/images/low.png" class="ui mini rounded image">
+                    <div class="content">
+                        {{temp.min_temp}}
+                    <div class="sub header">
+                        Min
+                    </div>
+                </div>
+                </h4>
+            </td>
+            <td>
+                <h4 class="ui image header">
+                    <img src="assets/images/high.png" class="ui mini rounded image">
+                    <div class="content">
+                        {{temp.max_temp}}
+                    <div class="sub header">
+                        Max
+                    </div>
+                </div>
+                </h4>
+            </td>
+            
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+

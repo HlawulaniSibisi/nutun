@@ -8,7 +8,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="ui container" style="padding-top: 20px;">
+
+
+    <div class="ui container" style="padding-top: 20px;" id="currentWeather">
 
         <div class="ui grey inverted menu large" >
             <div class="item" >
@@ -28,9 +30,11 @@
         </div>
 
         <div class="ui buttons" style="margin-top: 10px;">
-            <button class="ui button" id="saveButton">Save</button>
-            <button class="ui button">View History</button>
-          </div>
+            <button class="ui button" id="saveButton">Save Today</button>
+            <button class="ui button" id="historyButton">View History</button>
+            <button class="ui button" id="currentButton">View Current</button>
+        </div>
+
 
         <div class="ui placeholder segment basic" style="height: 50vh;" id="placeholder">
             <div class="ui icon header">
@@ -41,8 +45,10 @@
           </div>
 
         <div id="responseMessage" style="margin-top: 20px;"></div>
+        <div id="historyData" style="margin-top: 20px;"></div>
 
     </div>
+
 
     <script>
         $(document).ready(() => {
@@ -83,6 +89,13 @@
 
                 const inputAddress = $('#inputAddress').val();
 
+               
+                if(inputAddress==""){
+                    alert("please inser address")
+
+                    return
+                }
+
                 const postData = {
                     address: inputAddress
                 };
@@ -104,6 +117,28 @@
                 });
             });
 
+            $('#historyButton').click(() => {
+                
+                $.get('/history').done((data) => {
+                    $('#historyData').show();
+                    $('#historyData').html(data);
+                    $('#placeholder').hide()
+                    $('#responseMessage').hide()
+        
+                }).fail((jqXHR, textStatus, errorThrown) => {
+                    console.error('Error:', textStatus, errorThrown);
+                });
+            })
+
+            $('#currentButton').click(() => {
+                
+                $('#placeholder').hide()
+                $('#responseMessage').show()
+                $('#historyData').hide();
+        
+            })
+
+        
         });
     </script>
 </body>

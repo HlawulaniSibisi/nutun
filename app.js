@@ -56,6 +56,17 @@ app.post('/data', async (req, res) => {
     });
 });
 
+app.get('/history', async (req, res) => {
+
+    const data = await getHistoricalData();
+
+    res.render('history.html', { 
+        data
+    });
+});
+
+
+
 async function getGeolocationTemperature(address) {
     let returnData = null;
 
@@ -82,7 +93,7 @@ async function getGeolocationTemperature(address) {
             url: `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHER_API_KEY}`,
             headers: {}
         };
-        
+
         const weatherResponse = await axios.request(weatherConfig);
 
         returnData = {
@@ -96,6 +107,36 @@ async function getGeolocationTemperature(address) {
 
     return returnData;
 }
+
+// Function to get last 20 weather records (returns a Promise)
+async function getHistoricalData() {
+    const query = `
+        SELECT * FROM weather
+        ORDER BY created_at DESC
+        LIMIT 20
+    `;
+
+    try {
+        // Return a Promise that resolves with the data
+        const results = await new Promise((resolve, reject) => {
+            db.query(query, (err, results) => {
+                if (err) {
+                    reject('Error retrieving data from the database.');
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        // Return the results if successful
+        console.log(results)
+        return results;
+
+    } catch (err) {
+        // Return error message in case of failure
+        throw new Error(err);
+    }
+};
 
 
 app.post('/save', async (req, res) => {
