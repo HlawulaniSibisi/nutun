@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Website</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="assets/semantic.min.css">
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="assets/semantic.min.js"></script>
+</head>
+<body>
+
+  <div class="ui grey inverted menu large">
+    <div class="item" >
+        <img src="assets/images/nutun-logo.png" style="width: 200px;">
+      </div>
+    <a class="active red item">Red</a>
+    <a class="orange item">Orange</a>
+    <a class="yellow item">Yellow</a>
+    <a class="olive item">Olive</a>
+    <a class="green item">Green</a>
+    <a class="teal item">Teal</a>
+  </div>
+
+    <script>
+        // jQuery to change text when button is clicked
+        $(document).ready(function() {
+            $('#changeTextBtn').click(function() {
+                $('p').text('You clicked the button!');
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{% for temp in temperatures %}
+
+<div class="ui segment">
+    <h4 class="ui header">{{ temp.dt | moment }}</h4>
+    <div class="ui clearing divider"></div>
+
+    <div class="ui five statistics">
+
+        <div class="statistic">
+            <div class="value">
+                <img src="assets/images/rain.png" class="ui circular inline image">
+                {{temp.rain | default(0) | round(0) }} %
+            </div>
+            <div class="label">
+                Rain
+            </div>
+        </div>
+
+        <div class="statistic">
+            <div class="value">
+                <img src="assets/images/sun.png" class="ui circular inline image">
+                {{(100-temp.clouds) | default(0) | round(0) }} %
+            </div>
+            <div class="label">
+                Sun
+            </div>
+        </div>
+
+        <div class="statistic">
+            <div class="value">
+                <img src="assets/images/humidity.png" class="ui circular inline image">
+                {{temp.humidity}}
+            </div>
+            <div class="label">
+                Humidity
+            </div>
+        </div>
+
+        <div class="statistic">
+            <div class="value">
+                <img src="assets/images/low.png" class="ui circular inline image">
+                {{(temp.temp.min - 273.15) | default(0) | round(0)}} °C
+            </div>
+            <div class="label">
+                Min Temperature
+            </div>
+        </div>
+
+        <div class="statistic">
+            <div class="value">
+                <img src="assets/images/high.png" class="ui circular inline image">
+                {{(temp.temp.max - 273.15) | default(0) | round(0)}} °C
+            </div>
+            <div class="label">
+                Max Temperature
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% endfor %}
+

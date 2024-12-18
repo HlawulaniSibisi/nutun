@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Website</title>
+    <link rel="stylesheet" href="assets/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="ui container">
+
+        <div class="ui grey inverted menu large">
+            <div class="item" >
+                <img src="assets/images/nutun-logo.png" style="width: 200px;">
+            </div>
+           
+            <div class="right menu">
+                <a class="green item">Log In</a>
+                <a class="green item">Register</a>
+            </div>
+        </div>
+
+
+        <div class="ui action input fluid">
+            <input type="text" placeholder="Search..." >
+            <button class="ui button" id="callFunctionBtn">Search</button>
+        </div>
+
+            
+
+        
+        {% for temp in temperatures %}
+
+        <div class="ui segment">
+            <h5 class="ui header">Today</h5>
+            <div class="ui clearing divider"></div>
+
+            <div class="ui statistics">
+
+                <div class="statistic">
+                    <div class="value">
+                        <img src="assets/images/rain.png" class="ui circular inline image">
+                        42
+                    </div>
+                    <div class="label">
+                        Rain
+                    </div>
+                </div>
+
+                <div class="statistic">
+                    <div class="value">
+                        <img src="assets/images/sun.png" class="ui circular inline image">
+                        42
+                    </div>
+                    <div class="label">
+                        Sun
+                    </div>
+                </div>
+
+                <div class="statistic">
+                    <div class="value">
+                        <img src="assets/images/humidity.png" class="ui circular inline image">
+                        42
+                    </div>
+                    <div class="label">
+                        Humidity
+                    </div>
+                </div>
+
+                <div class="statistic">
+                    <div class="value">
+                        <img src="assets/images/low.png" class="ui circular inline image">
+                        42
+                    </div>
+                    <div class="label">
+                        Min Temperature
+                    </div>
+                </div>
+
+                <div class="statistic">
+                    <div class="value">
+                        <img src="assets/images/high.png" class="ui circular inline image">
+                        42
+                    </div>
+                    <div class="label">
+                        Max Temperature
+                    </div>
+                </div>
+
+            </div>
+        
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <script>
+        // JavaScript to handle button click
+        $(document).ready(()=> {
+            $('#callFunctionBtn').click(()=> {
+                // Make an AJAX GET request to the Node.js route
+                $.get('/call-function', (data)=> {
+                    // Display the response message
+                    console.log(data['weather']['daily']);
+                    geoTempData = data['weather']['daily']
+                    $('#responseMessage').text(data);
+                }).fail(()=> {
+                    $('#responseMessage').text('An error occurred.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

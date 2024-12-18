@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Website</title>
+    <link rel="stylesheet" href="assets/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="ui container" style="padding-top: 20px;">
+
+        <div class="ui grey inverted menu large" >
+            <div class="item" >
+                <img src="assets/images/nutun-logo.png" style="width: 200px;">
+            </div>
+           
+            <div class="right menu">
+                <!--<a class="green item">Log In</a>
+                <a class="green item">Register</a>-->
+            </div>
+        </div>
+
+
+        <div class="ui action input fluid" style="margin-top: 20px">
+            <input type="text" placeholder="Search..." id="inputAddress">
+            <button class="ui button" id="searchButton">Search</button>
+        </div>
+
+        <div class="ui buttons" style="margin-top: 10px;">
+            <button class="ui button" id="saveButton">Save</button>
+            <button class="ui button">View History</button>
+          </div>
+
+        <div class="ui placeholder segment basic" style="height: 50vh;" id="placeholder">
+            <div class="ui icon header">
+              <i class="pdf file outline icon"></i>
+              No weather data available, please insert address. 
+            </div>
+            
+          </div>
+
+        <div id="responseMessage" style="margin-top: 20px;"></div>
+
+    </div>
+
+    <script>
+        $(document).ready(() => {
+            $('#searchButton').click(() => {
+                // Data to be sent with the POST request (e.g., address)
+
+                const inputAddress = $('#inputAddress').val();
+
+                const postData = {
+                    address: inputAddress
+                };
+
+                $('#searchButton').addClass('loading');
+    
+                // Make an AJAX POST request to the Node.js route
+                $.ajax({
+                    url: '/data',         // The URL for the POST request
+                    type: 'POST',         // Set the request type to POST
+                    contentType: 'application/json',  // Sending data in JSON format
+                    data: JSON.stringify(postData),   // Send the data as a JSON string
+                    success: (data) => {
+                        // Process the response data (JSON)
+                        console.log(data);
+                        // Display the weather forecast (for example)
+                        $('#responseMessage').html(data);
+
+                        $('#placeholder').hide();
+                        $('#searchButton').removeClass('loading');
+                        
+                    },
+                    error: () => {
+                        $('#responseMessage').text('An error occurred.');
+                    }
+                });
+            });
+
+            $('#saveButton').click(() => {
+
+                const inputAddress = $('#inputAddress').val();
+
+                const postData = {
+                    address: inputAddress
+                };
+
+                $('#saveButton').addClass('loading');
+    
+                $.ajax({
+                    url: '/save',         
+                    type: 'POST',        
+                    contentType: 'application/json',  
+                    data: JSON.stringify(postData),  
+                    success: (data) => {
+                        $('#saveButton').removeClass('loading');
+                        
+                    },
+                    error: () => {
+                        $('#responseMessage').text('An error occurred.');
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
