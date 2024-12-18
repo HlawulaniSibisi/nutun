@@ -5,8 +5,10 @@ const axios = require('axios');
 const nunjucks = require('nunjucks');
 const moment = require('moment');
 const mysql = require('mysql2');
+const { loadCredentials } = require('./credentials');
 
 const app = express();
+
 
 // Create and configure the Nunjucks environment
 const env = nunjucks.configure('views', { 
@@ -27,6 +29,7 @@ const db = mysql.createConnection({
     database: process.env.DATABASE_NAME
 });
 
+let credentials = null
 // Connect to the database
 db.connect((err) => {
     if (err) {
@@ -34,6 +37,16 @@ db.connect((err) => {
         return;
     }
     console.log('Connected to the MySQL database.');
+
+  
+    // Load credentials from the database when the app starts
+    loadCredentials(db).then((data) => {
+        credentials = data;
+        console.log('Credentials loaded from database:', credentials);
+    }).catch((error) => {
+        console.error('Error loading credentials:', error);
+        process.exit(1); // Exit the app if credentials cannot be loaded
+    });
 });
 
 
@@ -70,15 +83,16 @@ app.get('/history', async (req, res) => {
 async function getGeolocationTemperature(address) {
     let returnData = null;
 
+
+
     try {
         if (!address) {
             throw new Error("Address is required");
         }
-
         const geolocationConfig = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://api.mapbox.com/search/geocode/v6/forward?q=${address}&proximity=-73.990593%2C40.740121&access_token=${process.env.MAPBOX_ACCESS_TOKEN}`,
+            url: `https://api.mapbox.com/search/geocode/v6/forward?q=${address}&proximity=-73.990593%2C40.740121&access_token=${credentials[0]['key_value']}`,
             headers: {}
         };
 
@@ -90,7 +104,7 @@ async function getGeolocationTemperature(address) {
         const weatherConfig = {
             method: 'get',
             maxBodyLength: Infinity,
-            url: `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHER_API_KEY}`,
+            url: `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lng}&appid=${credentials[1]['key_value']}`,
             headers: {}
         };
 
