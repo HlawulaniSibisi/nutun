@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Website</title>
+    <title>Nutun Weather</title>
     <link rel="stylesheet" href="assets/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -53,7 +53,6 @@
     <script>
         $(document).ready(() => {
             $('#searchButton').click(() => {
-                // Data to be sent with the POST request (e.g., address)
 
                 const inputAddress = $('#inputAddress').val();
 
@@ -63,16 +62,14 @@
 
                 $('#searchButton').addClass('loading');
     
-                // Make an AJAX POST request to the Node.js route
+                
                 $.ajax({
-                    url: '/data',         // The URL for the POST request
-                    type: 'POST',         // Set the request type to POST
-                    contentType: 'application/json',  // Sending data in JSON format
-                    data: JSON.stringify(postData),   // Send the data as a JSON string
+                    url: '/data',         
+                    type: 'POST',         
+                    contentType: 'application/json', 
+                    data: JSON.stringify(postData),  
                     success: (data) => {
-                        // Process the response data (JSON)
-                        console.log(data);
-                        // Display the weather forecast (for example)
+                        
                         $('#responseMessage').html(data);
 
                         $('#placeholder').hide();
@@ -89,10 +86,7 @@
 
                 const inputAddress = $('#inputAddress').val();
 
-               
                 if(inputAddress==""){
-                    alert("please inser address")
-
                     return
                 }
 

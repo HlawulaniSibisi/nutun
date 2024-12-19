@@ -10,7 +10,6 @@ const { loadCredentials } = require('./credentials');
 const app = express();
 
 
-// Create and configure the Nunjucks environment
 const env = nunjucks.configure('views', { 
     autoescape: true, 
     express: app 
@@ -18,10 +17,9 @@ const env = nunjucks.configure('views', {
 
 
 env.addFilter('moment', function(date, format) {
-    return moment.unix(date).format(format || 'DD MMMM YYYY, dddd'); // Desired format
+    return moment.unix(date).format(format || 'DD MMMM YYYY, dddd'); 
 });
 
-// MySQL connection
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
@@ -30,7 +28,7 @@ const db = mysql.createConnection({
 });
 
 let credentials = null
-// Connect to the database
+
 db.connect((err) => {
     if (err) {
         console.error('Database connection failed:', err);
@@ -39,13 +37,12 @@ db.connect((err) => {
     console.log('Connected to the MySQL database.');
 
   
-    // Load credentials from the database when the app starts
     loadCredentials(db).then((data) => {
         credentials = data;
         console.log('Credentials loaded from database:', credentials);
     }).catch((error) => {
         console.error('Error loading credentials:', error);
-        process.exit(1); // Exit the app if credentials cannot be loaded
+        process.exit(1); 
     });
 });
 
@@ -122,7 +119,6 @@ async function getGeolocationTemperature(address) {
     return returnData;
 }
 
-// Function to get last 20 weather records (returns a Promise)
 async function getHistoricalData() {
     const query = `
         SELECT * FROM weather
@@ -131,7 +127,7 @@ async function getHistoricalData() {
     `;
 
     try {
-        // Return a Promise that resolves with the data
+        
         const results = await new Promise((resolve, reject) => {
             db.query(query, (err, results) => {
                 if (err) {
@@ -142,12 +138,11 @@ async function getHistoricalData() {
             });
         });
 
-        // Return the results if successful
+
         console.log(results)
         return results;
 
     } catch (err) {
-        // Return error message in case of failure
         throw new Error(err);
     }
 };
@@ -159,9 +154,6 @@ app.post('/save', async (req, res) => {
     let addressInput = encodeURI(req.body['address'])
     let data = await getGeolocationTemperature(addressInput) 
 
-
-    //const { longitude, latitude, address, rain, sun, humidity, min_temp, max_temp } = req.body;
-
     longitude = data['weather']['lon']
     latitude = data['weather']['lat']
     address = req.body['address']
@@ -172,7 +164,6 @@ app.post('/save', async (req, res) => {
     max_temp = data['weather']['daily'][0]['temp']['max']-273
 
 
-    // MySQL query to insert data
     const query = `
         INSERT INTO weather (longitude, latitude, address, rain, sun, humidity, min_temp, max_temp)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -191,7 +182,6 @@ app.post('/save', async (req, res) => {
         }
     );
 });
-
 
 
 
